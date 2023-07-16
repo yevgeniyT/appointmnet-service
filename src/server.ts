@@ -2,19 +2,22 @@
 import errorHandler from "errorhandler";
 
 import app from "./app";
+import { connectDB } from "./config/db";
+import logger from "./utils/logger";
 
-//Error Handler. Provides error handing middleware  only use in development
+//Error Handler. Provides error handing middleware only use in development
 if (process.env.NODE_ENV === "development") {
     app.use(errorHandler);
 }
+// Connect to MongoDB
+connectDB();
 
 // Start Express server
-
 app.listen(app.get("port"), () => {
-    console.log(
-        "App is running at http://localhost:%d in %s mode",
-        app.get("port"),
-        app.get("env")
+    logger.info(
+        `App is running at http://localhost:${app.get("port")} in ${app.get(
+            "env"
+        )} mode`
     );
-    console.log("  Press CTRL-C to stop\n");
+    logger.info("Press CTRL-C to stop\n");
 });
