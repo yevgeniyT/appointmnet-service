@@ -1,12 +1,19 @@
 import mongoose from "mongoose";
 
-export interface IAppointment extends Document {
+export interface IAppointment extends mongoose.Document {
     appointmentId: string;
-    patientPhoneNumber: string;
-    guardianPhoneNumber: string;
+    patientPhoneNumber?: string;
+    guardianPhoneNumber?: string;
     appointmentDate: Date;
     doctorName: string;
-    appointmentStatus: mongoose.Schema.Types.ObjectId[];
+    appointmentStatus:
+        | "Not Confirmed"
+        | "Scheduled"
+        | "Patient Waiting"
+        | "Patient in Chair"
+        | "Appointment Completed"
+        | "Appointment Did Not Occur"
+        | "Appointment Cancelled";
     createdAt: Date;
     updatedAt: Date;
 }
@@ -32,8 +39,16 @@ const appointmentSchema = new mongoose.Schema(
             required: true,
         },
         appointmentStatus: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Status",
+            type: String,
+            enum: [
+                "Not Confirmed",
+                "Scheduled",
+                "Patient Waiting ",
+                "Patient in Chair",
+                "Appointment Completed",
+                "Appointment Did Not Occur",
+                "Appointment Cancelled",
+            ],
         },
     },
     { timestamps: true }
