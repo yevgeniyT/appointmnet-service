@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
+import morgan from "morgan";
 
 //Components import
 import apiContentType from "./middleware/apiContentType";
@@ -14,6 +15,8 @@ dotenv.config({ path: ".env" }); //reads the .env file in the root of the projec
 
 const app = express();
 
+app.use(morgan("dev"));
+
 // Express configuration
 app.set("port", process.env.PORT); //set the value of the 'port' setting to whatever is stored in the environment variable PORT
 app.use(
@@ -22,14 +25,14 @@ app.use(
         credentials: true,
     })
 );
-app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use(apiContentType);
 
 // Set up routers
-app.use("/api/vi/appointments", appointmentRouter);
+app.use("/api/v1/appointments", appointmentRouter);
 
 // Custom API error handler
 app.use(apiErrorHandler);

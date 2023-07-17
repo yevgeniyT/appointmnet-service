@@ -59,3 +59,12 @@ export class BadRequestError extends ApiError {
         super(statusCode, message, source);
     }
 }
+export class ConflictError extends ApiError {
+    constructor(
+        readonly message: string = "Conflict",
+        readonly statusCode: number = 409,
+        source?: Error | any
+    ) {
+        super(statusCode, message, source);
+    }
+}
