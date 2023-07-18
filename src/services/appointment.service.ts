@@ -19,7 +19,6 @@ const update = async (
     updatedData: IAppointment,
     appointmetId: string
 ): Promise<IAppointment> => {
-    // 1.Check if appointment already exists
     const foundAppointment = await AppointmentModel.findOneAndUpdate(
         { appointmentId: appointmetId },
         updatedData,
@@ -34,4 +33,19 @@ const update = async (
     return foundAppointment;
 };
 
-export default { create, update };
+const deleteAppointment = async (
+    appointmetId: string
+): Promise<IAppointment> => {
+    const foundAppointment = await AppointmentModel.findOneAndDelete({
+        appointmentId: appointmetId,
+    });
+    if (!foundAppointment) {
+        throw new NotFoundError(
+            `An appointment with id - ${appointmetId} does not exists.`
+        );
+    }
+
+    return foundAppointment;
+};
+
+export default { create, update, deleteAppointment };

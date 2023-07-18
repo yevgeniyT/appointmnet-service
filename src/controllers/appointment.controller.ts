@@ -12,7 +12,8 @@ const addAppointment = async (
     next: NextFunction
 ) => {
     try {
-        const newAppointment = await appointmentService.create(req.body);
+        const appointmentData = req.body;
+        const newAppointment = await appointmentService.create(appointmentData);
 
         return res.json(newAppointment);
     } catch (error) {
@@ -31,14 +32,14 @@ const updateAppointment = async (
     next: NextFunction
 ) => {
     try {
-        const update = req.body;
+        const updateData = req.body;
         const appointmentId = req.params.appointmentId;
-        const updatedAppointment = await appointmentService.update(
-            update,
+        const updateAppointment = await appointmentService.update(
+            updateData,
             appointmentId
         );
 
-        return res.json(updatedAppointment);
+        return res.json(updateAppointment);
     } catch (error) {
         if (error instanceof Error && error.name == "ValidationError") {
             next(new BadRequestError("Invalid Request", 400, error));
@@ -55,17 +56,16 @@ const deleteAppointment = async (
     next: NextFunction
 ) => {
     try {
-    } catch (error) {}
+        const appointmentId = req.params.appointmentID;
+        await appointmentService.deleteAppointment(appointmentId);
+        res.status(204).end();
+    } catch (error) {
+        if (error instanceof Error && error.name == "ValidationError") {
+            next(new BadRequestError("Invalid Request", 400, error));
+        } else {
+            next(error);
+        }
+    }
 };
 
-//GET /appointmens
-const getAppointment = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
-    try {
-        res.json("all correct");
-    } catch (error) {}
-};
-export { addAppointment, updateAppointment, deleteAppointment, getAppointment };
+export { addAppointment, updateAppointment, deleteAppointment };
