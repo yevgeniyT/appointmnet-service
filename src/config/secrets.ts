@@ -26,7 +26,7 @@ if (!MONGODB_URI) {
     process.exit(1); //Node.js command that terminates the current process.
 }
 
-// TurboSms
+// TurboSms Services
 export const SMS_AUTH_TOKEN = process.env.SMS_AUTH_TOKEN as string;
 export const SMS_BASE_URL = process.env.SMS_BASE_URL as string;
 export const SMS_SENDER = process.env.SMS_SENDER as string;
@@ -43,5 +43,21 @@ if (!SMS_BASE_URL) {
 
 if (!SMS_SENDER) {
     logger.error("No sms sender. Set SMS_SENDER environment variable");
+    process.exit(1);
+}
+
+// Bitris 24 Services
+export const B24_AUTH_TOKEN = process.env.B24_AUTH_TOKEN as string;
+export const B24_ADMIN_ID = process.env.B24_ADMIN_ID as string;
+
+if (!B24_AUTH_TOKEN) {
+    logger.error(
+        "No bitrix 24 auth token. Set B24_AUTH_TOKEN environment variable"
+    );
+    process.exit(1);
+}
+
+if (!B24_ADMIN_ID) {
+    logger.error("No bitrix 24 admin ID. B24_ADMIN_ID environment variable");
     process.exit(1);
 }

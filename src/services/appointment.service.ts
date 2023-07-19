@@ -1,8 +1,9 @@
 // Components import
 import AppointmentModel, { IAppointment } from "../models/appointmentModel";
 import { NotFoundError, ConflictError } from "../helpers/apiError";
-import sendSmsService from "./smsService";
+import sendSmsService from "./sms.Service";
 import { APPOINTMENT_REMINDER } from "../config/smsTemplates";
+import sendComment from "./bitrix24.service";
 
 //Types
 interface SmsData {
@@ -26,9 +27,9 @@ const create = async (appointmentData: IAppointment): Promise<IAppointment> => {
         recipients: [newAppointment.patientPhoneNumber],
         text: APPOINTMENT_REMINDER(newAppointment.appointmentDate),
     };
-    console.log(smsData);
 
-    sendSmsService(smsData as SmsData);
+    // sendSmsService(smsData as SmsData); //TODO Add error handling when responce
+    sendComment();
 
     return newAppointment;
 };

@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Components import
 import { SMS_AUTH_TOKEN, SMS_BASE_URL, SMS_SENDER } from "../config/secrets";
-import { BadRequestError, InternalServerError } from "../helpers/apiError";
+import { InternalServerError } from "../helpers/apiError";
 
 //Types
 interface SmsData {
