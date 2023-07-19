@@ -1,6 +1,14 @@
 // Components import
 import AppointmentModel, { IAppointment } from "../models/appointmentModel";
 import { NotFoundError, ConflictError } from "../helpers/apiError";
+import sendSmsService from "./smsService";
+import { APPOINTMENT_REMINDER } from "../config/smsTemplates";
+
+//Types
+interface SmsData {
+    recipients: string[];
+    text: string;
+}
 
 const create = async (appointmentData: IAppointment): Promise<IAppointment> => {
     // 1.Check if appointment already exists
@@ -12,6 +20,16 @@ const create = async (appointmentData: IAppointment): Promise<IAppointment> => {
     }
     // 2. Add appointment and save it to DB
     const newAppointment = await AppointmentModel.create(appointmentData);
+
+    // 3. Send sms to patient
+    const smsData = {
+        recipients: [newAppointment.patientPhoneNumber],
+        text: APPOINTMENT_REMINDER(newAppointment.appointmentDate),
+    };
+    console.log(smsData);
+
+    sendSmsService(smsData as SmsData);
+
     return newAppointment;
 };
 

@@ -16,6 +16,7 @@ if (fs.existsSync(".env")) {
     dotenv.config({ path: ".env.example" }); // you can delete this after you create your own .env file!
 }
 
+// MongoDb
 export const MONGODB_URI = process.env.MONGODB_URI as string;
 
 if (!MONGODB_URI) {
@@ -23,4 +24,24 @@ if (!MONGODB_URI) {
         "No mongo connection string. Set MONGODB_URI environment variable."
     );
     process.exit(1); //Node.js command that terminates the current process.
+}
+
+// TurboSms
+export const SMS_AUTH_TOKEN = process.env.SMS_AUTH_TOKEN as string;
+export const SMS_BASE_URL = process.env.SMS_BASE_URL as string;
+export const SMS_SENDER = process.env.SMS_SENDER as string;
+
+if (!SMS_AUTH_TOKEN) {
+    logger.error("No sms auth token. Set SMS_AUTH_TOKEN environment variable");
+    process.exit(1);
+}
+
+if (!SMS_BASE_URL) {
+    logger.error("No sms base url. Set SMS_BASE_URL environment variable");
+    process.exit(1);
+}
+
+if (!SMS_SENDER) {
+    logger.error("No sms sender. Set SMS_SENDER environment variable");
+    process.exit(1);
 }
