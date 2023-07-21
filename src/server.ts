@@ -4,6 +4,7 @@ import errorHandler from "errorhandler";
 import app from "./app";
 import { connectDB } from "./config/db";
 import logger from "./utils/logger";
+import agenda from "./jobs/agenda";
 
 //Error Handler. Provides error handing middleware only use in development
 if (process.env.NODE_ENV === "development") {
@@ -11,6 +12,9 @@ if (process.env.NODE_ENV === "development") {
 }
 // Connect to MongoDB
 connectDB();
+
+// Start Agenda
+agenda.start();
 
 // Start Express server
 app.listen(app.get("port"), () => {

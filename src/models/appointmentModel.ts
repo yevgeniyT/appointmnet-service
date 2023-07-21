@@ -2,57 +2,77 @@ import mongoose from "mongoose";
 
 export interface IAppointment extends mongoose.Document {
     appointmentId: string;
-    patientPhoneNumber?: string;
-    guardianPhoneNumber?: string;
     appointmentDate: Date;
-    doctorName: string;
+    appointmentCreateDate: Date;
     appointmentStatus:
         | "Not Confirmed"
         | "Scheduled"
         | "Patient Waiting"
-        | "Patient in Chair"
-        | "Appointment Completed"
-        | "Appointment Did Not Occur"
-        | "Appointment Cancelled";
-    createdAt: Date;
-    updatedAt: Date;
+        | "In Session"
+        | "Completed"
+        | "No Show"
+        | "Cancelled";
+    customerCrmId: string;
+    customerPhoneNumber: string;
+    isKid: boolean;
+    isSmsSent: boolean;
+    smsDeliveryStatus: string;
+    isDataToErpSent: boolean;
+    erpExchangeStatus: string;
 }
 
-const appointmentSchema = new mongoose.Schema(
-    {
-        appointmentId: {
-            type: String,
-            required: true,
-        },
-        patientPhoneNumber: {
-            type: String,
-        },
-        guardianPhoneNumber: {
-            type: String,
-        },
-        appointmentDate: {
-            type: Date,
-            required: true,
-        },
-        doctorName: {
-            type: String,
-            required: true,
-        },
-        appointmentStatus: {
-            type: String,
-            enum: [
-                "Not Confirmed",
-                "Scheduled",
-                "Patient Waiting ",
-                "Patient in Chair",
-                "Appointment Completed",
-                "Appointment Did Not Occur",
-                "Appointment Cancelled",
-            ],
-        },
+const appointmentSchema = new mongoose.Schema({
+    appointmentId: {
+        type: String,
+        required: true,
     },
-    { timestamps: true }
-);
+    appointmentDate: {
+        type: Date,
+        required: true,
+    },
+    appointmentCreateDate: {
+        type: Date,
+        required: true,
+    },
+    appointmentStatus: {
+        type: String,
+        enum: [
+            "Not Confirmed",
+            "Scheduled",
+            "Patient Waiting",
+            "In Session",
+            "Completed",
+            "No Show",
+            "Cancelled",
+        ],
+        default: "Not Confirmed",
+    },
+    customerCrmId: {
+        type: String,
+        required: true,
+    },
+    customerPhoneNumber: {
+        type: String,
+        required: true,
+    },
+    isKid: {
+        type: Boolean,
+        default: true,
+    },
+    isSmsSend: {
+        type: Boolean,
+        default: false,
+    },
+    smsDeliveryStatus: { type: String, default: "Not send" },
+    isDataToErpSend: {
+        type: Boolean,
+        default: false,
+    },
+    erpExcangeStatus: {
+        type: String,
+        default: "Not send",
+    },
+});
 
 const AppointmentModel = mongoose.model<IAppointment>(
     "Appointments",
