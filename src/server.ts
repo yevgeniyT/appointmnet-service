@@ -4,7 +4,8 @@ import errorHandler from "errorhandler";
 import app from "./app";
 import { connectDB } from "./config/db";
 import logger from "./utils/logger";
-import agenda from "./jobs/agenda";
+import agenda from "./jobs";
+import schedule from "./jobs/scheduler";
 
 //Error Handler. Provides error handing middleware only use in development
 if (process.env.NODE_ENV === "development") {
@@ -14,7 +15,7 @@ if (process.env.NODE_ENV === "development") {
 connectDB();
 
 // Start Agenda
-agenda.start();
+agenda.start().then(() => agenda.now("send initial appointment reminder", {}));
 
 // Start Express server
 app.listen(app.get("port"), () => {

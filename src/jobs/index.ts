@@ -5,24 +5,23 @@ import Agenda from "agenda";
 import { MONGODB_URI } from "../config/secrets";
 import logger from "../utils/logger";
 import initialReminderJob from "./initialRemindersJob";
+import smsDefinitions from "./definitions/smsReminders";
 
+// Establish connection to mongoDB
 const agenda = new Agenda({
     db: { address: MONGODB_URI },
 });
 
-// Add listeners
+// Listen for ready or error events
 agenda.on("ready", () => {
-    logger.info("Agenda is connected to MongoDB and is ready");
-    // Define jobs after Agenda is ready
-    const jobName = "send initial appointment reminder";
-    initialReminderJob(agenda);
-    agenda.now(jobName, {});
-    // Don't forget to start agenda
-    agenda.start();
+    logger.info("Agenda is ready");
 });
 
 agenda.on("error", (error: Error) => {
-    logger.error("Error connecting Agenda to MongoDB", error);
+    logger.error("Agenda connecting error", error);
 });
+
+//define agenda jobs
+smsDefinitions(agenda);
 
 export default agenda;
