@@ -1,13 +1,9 @@
 import JobHandlers from "../handlers";
 
 const smsDefinitions = (agenda: any) => {
+    agenda.define("send appointment reminder", JobHandlers.appointmentReminder);
     agenda.define(
-        "send initial appointment reminder",
-        JobHandlers.initialReminder
-    );
-    agenda.define("resend  appointment reminder", JobHandlers.resendReminder);
-    agenda.define(
-        "cancelation appointment reminder",
+        "send cancelation reminder",
         JobHandlers.cancelationRemainder
     );
 };

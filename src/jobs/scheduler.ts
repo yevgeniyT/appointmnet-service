@@ -1,8 +1,13 @@
 import agenda from "./index";
 
 const schedule = {
-    testSchedule: async (data: any) => {
-        await agenda.now("test", data);
+    reminderSchedule: async (data: any) => {
+        try {
+        } catch (error) {}
+    },
+    cancelationSchedule: async (data: any) => {
+        try {
+        } catch (error) {}
     },
 };
 

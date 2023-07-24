@@ -4,7 +4,6 @@ import Agenda from "agenda";
 // Components import
 import { MONGODB_URI } from "../config/secrets";
 import logger from "../utils/logger";
-import initialReminderJob from "./initialRemindersJob";
 import smsDefinitions from "./definitions/smsReminders";
 
 // Establish connection to mongoDB
