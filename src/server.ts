@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === "development") {
 connectDB();
 
 // Start Agenda
-agenda.start().then(() => agenda.now("send appointment reminder", {}));
+agenda.start().then(() => agenda.now("send cancelation reminder", {}));
 
 // Start Express server
 app.listen(app.get("port"), () => {

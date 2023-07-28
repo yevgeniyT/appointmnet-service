@@ -1,12 +1,17 @@
 // Components import
-import { APPOINTMENT_CONFIRMATION } from "../config/smsTemplates";
+import {
+    APPOINTMENT_CONFIRMATION,
+    APPOINTMENT_CANCELATION,
+} from "../config/smsTemplates";
 import { InternalServerError } from "../helpers/apiError";
 import AppointmentModel from "../models/appointmentModel";
 import sendSms from "../services/sms.Service";
 import logger from "../utils/logger";
 
-// Function to get appointments
-const getAppointments = async () => {
+// Function to get list of appointments
+const getAppointments = async (
+    template: (date: Date, id: string) => string
+) => {
     try {
         // 1. Get today's and tomorrow's dates
         const startOfToday = new Date(); // creates new Date object with current date and time
@@ -23,7 +28,7 @@ const getAppointments = async () => {
         const appointments = await AppointmentModel.find({
             appointmentStatus: "Scheduled",
             appointmentDate: {
-                $gte: startOfTomorrow, //values that are greater than or equal to a specified value.
+                $gte: startOfTomorrow, //values that are greater than or equal to startOfTomorrow
                 $lt: endOfTomorrow, //values that are less than a specified value.
             },
             appointmentCreateDate: {
@@ -35,7 +40,10 @@ const getAppointments = async () => {
         const smsData = appointments.map((appointment) => {
             return {
                 recipients: [appointment.customerPhoneNumber],
-                text: APPOINTMENT_CONFIRMATION(appointment.appointmentDate),
+                text: template(
+                    appointment.appointmentDate,
+                    appointment.appointmentId
+                ),
             };
         });
 
@@ -60,9 +68,30 @@ const getAppointments = async () => {
 };
 
 const JobHandlers = {
-    appointmentReminder: async (job: any) => {
+    // appointmentReminder: async (job: any) => {
+    //     try {
+    //         const smsData = await getAppointments(APPOINTMENT_CONFIRMATION);
+    //         // Send SMS to each appointment
+    //         for (let data of smsData) {
+    //             try {
+    //                 await sendSms(data);
+    //                 logger.debug(
+    //                     `SMS sent to ${data.recipients} with message: ${data.text}`
+    //                 );
+    //             } catch (error) {
+    //                 logger.error(
+    //                     `Failed to send SMS to ${data.recipients}: ${error}`,
+    //                     { error }
+    //                 );
+    //             }
+    //         }
+    //     } catch (error) {}
+    // },
+    cancelationRemainder: async (job: any) => {
         try {
-            const smsData = await getAppointments();
+            const smsData = await getAppointments(APPOINTMENT_CANCELATION);
+            console.log(smsData);
+
             // Send SMS to each appointment
             for (let data of smsData) {
                 try {
@@ -77,10 +106,6 @@ const JobHandlers = {
                     );
                 }
             }
-        } catch (error) {}
-    },
-    cancelationRemainder: async (job: any) => {
-        try {
         } catch (error) {}
     },
 };

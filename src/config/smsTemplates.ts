@@ -1,7 +1,10 @@
-export const APPOINTMENT_REMINDER = (time: Date) =>
-    `Don't forget your appointment tomorrow at ${time}.`;
+export const APPOINTMENT_REMINDER = (time: Date, appointmentId: string) =>
+    `APPOINTMENT REMINDER ID${appointmentId} on ${time}.`;
 
-export const APPOINTMENT_CONFIRMATION = (date: Date) =>
-    `Your appointment has been confirmed for ${date}.`;
+export const APPOINTMENT_CONFIRMATION = (time: Date, appointmentId: string) =>
+    `APPOINTMENT CONFIRMATION ID${appointmentId} on ${time}.`;
+
+export const APPOINTMENT_CANCELATION = (time: Date, appointmentId: string) =>
+    `APPOINTMENT CANCELATION ID${appointmentId} on ${time}.`;
 
 // Add more templates as needed

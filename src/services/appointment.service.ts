@@ -24,7 +24,10 @@ const create = async (appointmentData: IAppointment): Promise<IAppointment> => {
     // 3. Send sms to patient
     const smsData = {
         recipients: [newAppointment.customerPhoneNumber],
-        text: APPOINTMENT_REMINDER(newAppointment.appointmentDate),
+        text: APPOINTMENT_REMINDER(
+            newAppointment.appointmentDate,
+            newAppointment.appointmentId
+        ),
     };
 
     sendSmsService(smsData as SmsData); //TODO Add error handling when responce

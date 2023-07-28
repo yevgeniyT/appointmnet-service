@@ -31,8 +31,6 @@ const sendSms = async (smsData: SmsData) => {
             }
         );
 
-        console.log(response.data);
-
         return response;
     } catch (error) {
         throw new InternalServerError("Failed to send SMS", 500, error);
