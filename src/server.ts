@@ -18,10 +18,10 @@ if (process.env.NODE_ENV === "development") {
 connectDB();
 
 // Start Agenda
-agenda.start().then(() => {
-    schedule.reminderSchedule();
-    schedule.cancelationSchedule();
-});
+// agenda.start().then(() => {
+//     schedule.reminderSchedule();
+//     schedule.cancelationSchedule();
+// });
 
 // Start Express server
 app.listen(app.get("port"), () => {
