@@ -5,29 +5,27 @@ import axios from "axios";
 import { B24_ADMIN_ID, B24_AUTH_TOKEN } from "../config/secrets";
 import { InternalServerError } from "../helpers/apiError";
 
-const BASE_URL = "https://kiddydenta.bitrix24.eu/rest";
+const BASE_URL = "https://kiddydenta.bitrix24.eu/rest/1";
 
-//Types
-// interface SmsData {
-//     recipients: string[];
-//     text: string;
-// }
+// Types
+interface CrmData {
+    customerId: string;
+    text: string;
+}
 
-const sendComment = async () => {
+const sendCrmNotification = async (crmData: CrmData) => {
     try {
         // 1. Post request to API to send SMS
         const response = await axios.post(
-            `${BASE_URL}/${B24_AUTH_TOKEN}/${B24_AUTH_TOKEN}/crm.timeline.comment.add`,
+            `${BASE_URL}/${B24_AUTH_TOKEN}/crm.timeline.comment.add`,
             {
                 fields: {
-                    ENTITY_ID: 9673,
+                    ENTITY_ID: crmData.customerId,
                     ENTITY_TYPE: "contact",
-                    COMMENT: "New comment was added",
+                    COMMENT: crmData.text,
                 },
             }
         );
-
-        console.log(response.data);
 
         return response;
     } catch (error) {
@@ -35,4 +33,4 @@ const sendComment = async () => {
     }
 };
 
-export default sendComment;
+export default sendCrmNotification;

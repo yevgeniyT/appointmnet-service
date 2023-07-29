@@ -7,6 +7,9 @@ import logger from "./utils/logger";
 import agenda from "./jobs";
 import schedule from "./jobs/scheduler";
 
+// Start logging
+logger.info("Server is starting...");
+
 //Error Handler. Provides error handing middleware only use in development
 if (process.env.NODE_ENV === "development") {
     app.use(errorHandler);
@@ -15,7 +18,10 @@ if (process.env.NODE_ENV === "development") {
 connectDB();
 
 // Start Agenda
-agenda.start().then(() => agenda.now("send cancelation reminder", {}));
+agenda.start().then(() => {
+    schedule.reminderSchedule();
+    schedule.cancelationSchedule();
+});
 
 // Start Express server
 app.listen(app.get("port"), () => {
