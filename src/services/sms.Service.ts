@@ -15,6 +15,7 @@ import {
     RequiredContentError,
     RequiredTokenError,
 } from "../helpers/smsError";
+import logger from "../utils/logger";
 
 //Types
 interface SmsData {
@@ -41,11 +42,17 @@ const sendSms = async (smsData: SmsData) => {
                 },
             }
         );
-
+        // As api does not throw error but only return response with status we throw error in all cases when response status code is not equal to 801 which is sucess code.
+        if (response.data.response_code !== 801) {
+            throw {
+                message: "SMS API responded with an error",
+                code: response.data.response_code,
+            };
+        }
         return response;
     } catch (error: any) {
-        if (error.response) {
-            switch (error.response.response_code) {
+        if (error.code) {
+            switch (error.code) {
                 case 103:
                     throw new RequiredTokenError();
                 case 104:
@@ -65,6 +72,10 @@ const sendSms = async (smsData: SmsData) => {
                 case 503:
                     throw new FailedSmsSendError();
                 default:
+                    logger.error(
+                        `Unexpected error when sending SMS: ${error.message}`,
+                        { error }
+                    );
                     throw new InternalServerError(
                         "Failed to send SMS",
                         500,
@@ -72,6 +83,7 @@ const sendSms = async (smsData: SmsData) => {
                     );
             }
         } else {
+            logger.error(`Failed to send SMS: ${error.message}`, { error });
             throw new InternalServerError("Failed to send SMS", 500, error);
         }
     }

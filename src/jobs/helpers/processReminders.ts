@@ -16,6 +16,7 @@ const processReminder = async (type: string, template: TemplateFunction) => {
 
         // 2. Get array with objects to be send to SMS and CRM service
         const smsData = prepareSmsData(appointments, template);
+
         const crmData = prepareCrmData(appointments, template);
 
         // 3. Send SMS to each appointment
