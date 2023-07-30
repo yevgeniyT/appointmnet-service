@@ -4,6 +4,15 @@ import { Request, Response, NextFunction } from "express";
 // Components import
 import appointmentService from "../services/appointment.service";
 import { BadRequestError } from "../helpers/apiError";
+import { APPOINTMENT_REMINDER } from "../config/smsTemplates";
+import sendSmsService from "./../services/sms.Service";
+import logger from "../utils/logger";
+
+//Types
+interface SmsData {
+    recipients: string[];
+    text: string;
+}
 
 // POST /appointments
 const addAppointment = async (
@@ -15,7 +24,22 @@ const addAppointment = async (
         const appointmentData = req.body;
         const newAppointment = await appointmentService.create(appointmentData);
 
-        return res.json(newAppointment);
+        // If appointment is created successfuly
+        if (newAppointment) {
+            // 3. Prepare sms data
+            const smsData = {
+                recipients: [newAppointment.customerPhoneNumber],
+                text: APPOINTMENT_REMINDER(
+                    newAppointment.appointmentDate,
+                    newAppointment.appointmentId
+                ),
+            };
+            // Send SMS asynchronously and handle any errors
+            sendSmsService(smsData as SmsData).catch((error) => {
+                logger.error(`Failed to send on create SMS: ${error}`);
+            });
+            return res.json(newAppointment);
+        }
     } catch (error) {
         if (error instanceof Error && error.name == "ValidationError") {
             next(new BadRequestError("Invalid Request", 400, error));

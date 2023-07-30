@@ -15,10 +15,6 @@ export interface IAppointment extends mongoose.Document {
     customerCrmId: string;
     customerPhoneNumber: string;
     isKid: boolean;
-    isSmsSent: boolean;
-    smsDeliveryStatus: string;
-    isDataToErpSent: boolean;
-    erpExchangeStatus: string;
 }
 
 const appointmentSchema = new mongoose.Schema({
@@ -58,19 +54,6 @@ const appointmentSchema = new mongoose.Schema({
     isKid: {
         type: Boolean,
         default: true,
-    },
-    isSmsSend: {
-        type: Boolean,
-        default: false,
-    },
-    smsDeliveryStatus: { type: String, default: "Not send" },
-    isDataToErpSend: {
-        type: Boolean,
-        default: false,
-    },
-    erpExcangeStatus: {
-        type: String,
-        default: "Not send",
     },
 });
 
