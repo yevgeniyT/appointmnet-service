@@ -3,21 +3,32 @@ import { InternalServerError } from "../../helpers/apiError";
 import sendCrmNotification from "../../services/bitrix24.service";
 import sendSms from "../../services/sms.Service";
 import logger from "../../utils/logger";
-import { prepareCrmData, prepareSmsData } from "./../helpers/dataPreparation";
-import getAppointments from "./../helpers/getAppointments";
+import {
+    prepareMultipleCrmData,
+    prepareMultipleSmsData,
+    prepareSingleCrmData,
+    prepareSingleSmsData,
+} from "./../helpers/dataPreparation";
+import {
+    getMutipleAppointments,
+    getSingleAppointment,
+} from "./getAppointments";
 
 type TemplateFunction = (time: Date, appointmentId: string) => string;
 
-const processReminder = async (type: string, template: TemplateFunction) => {
+const processMultipleReminders = async (
+    type: string,
+    template: TemplateFunction
+) => {
     try {
-        logger.info(`Start processing ${type} reminder`);
+        logger.info(`Start processing multiple ${type}  reminders`);
         // 1. Get array of filtered appointments
-        const appointments = await getAppointments();
+        const appointments = await getMutipleAppointments();
 
         // 2. Get array with objects to be send to SMS and CRM service
-        const smsData = prepareSmsData(appointments, template);
+        const smsData = prepareMultipleSmsData(appointments, template);
 
-        const crmData = prepareCrmData(appointments, template);
+        const crmData = prepareMultipleCrmData(appointments, template);
 
         // 3. Send SMS to each appointment
         for (let data of smsData) {
@@ -57,9 +68,11 @@ const processReminder = async (type: string, template: TemplateFunction) => {
             }
         }
 
-        logger.info(`Finish processing ${type} reminder`);
+        logger.info(`Finish processing multiple ${type}  reminders`);
     } catch (error) {
-        logger.error(`Failed to send ${type} reminders: ${error}`, { error });
+        logger.error(`Failed to send multiple ${type} reminders: ${error}`, {
+            error,
+        });
         throw new InternalServerError(
             `Failed to send ${type} reminders: ${error}`,
             500,
@@ -68,4 +81,35 @@ const processReminder = async (type: string, template: TemplateFunction) => {
     }
 };
 
-export default processReminder;
+const processSingleReminder = async (
+    type: string,
+    template: TemplateFunction,
+    appointmentId: string
+) => {
+    try {
+        logger.info(`Start processing single ${type}  reminder`);
+        // 1. Get appontmnet
+        const appointment = await getSingleAppointment(appointmentId);
+
+        // 2. Prepare data for sirvices
+        const smsData = prepareSingleSmsData(appointment, template);
+        const crmData = prepareSingleCrmData(appointment, template);
+
+        // 3. Send data to services
+        await sendSms(smsData);
+        await sendCrmNotification(crmData);
+
+        logger.info(`Finish processing ${type} single reminder`);
+    } catch (error) {
+        logger.error(`Failed to send single ${type} reminder: ${error}`, {
+            error,
+        });
+        throw new InternalServerError(
+            `Failed to send single ${type} reminder: ${error}`,
+            500,
+            error
+        );
+    }
+};
+
+export { processMultipleReminders, processSingleReminder };

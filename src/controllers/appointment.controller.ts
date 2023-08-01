@@ -4,9 +4,8 @@ import { Request, Response, NextFunction } from "express";
 // Components import
 import appointmentService from "../services/appointment.service";
 import { BadRequestError } from "../helpers/apiError";
-import { APPOINTMENT_REMINDER } from "../config/smsTemplates";
-import sendSmsService from "./../services/sms.Service";
-import logger from "../utils/logger";
+
+import schedule from "../jobs/scheduler";
 
 //Types
 interface SmsData {
@@ -24,20 +23,12 @@ const addAppointment = async (
         const appointmentData = req.body;
         const newAppointment = await appointmentService.create(appointmentData);
 
-        // If appointment is created successfuly
+        // If appointment is created successfuly use agenda jobs to process sending sms and crm notifications
         if (newAppointment) {
-            // 3. Prepare sms data
-            const smsData = {
-                recipients: [newAppointment.customerPhoneNumber],
-                text: APPOINTMENT_REMINDER(
-                    newAppointment.appointmentDate,
-                    newAppointment.appointmentId
-                ),
-            };
-            // Send SMS asynchronously and handle any errors
-            sendSmsService(smsData as SmsData).catch((error) => {
-                logger.error(`Failed to send on create SMS: ${error}`);
-            });
+            await schedule.singleAppointmentSchedule(
+                newAppointment.appointmentId.toString()
+            );
+
             return res.json(newAppointment);
         }
     } catch (error) {
@@ -81,7 +72,11 @@ const deleteAppointment = async (
 ) => {
     try {
         const appointmentId = req.params.appointmentID;
+
+        await schedule.singleCancelationSchedule(appointmentId.toString());
+
         await appointmentService.deleteAppointment(appointmentId);
+
         res.status(204).end();
     } catch (error) {
         if (error instanceof Error && error.name == "ValidationError") {

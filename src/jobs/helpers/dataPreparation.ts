@@ -7,7 +7,7 @@ interface Appointment {
 
 type TemplateFunction = (date: Date, id: string) => string;
 
-const prepareSmsData = (
+const prepareMultipleSmsData = (
     appointmens: Appointment[],
     template: TemplateFunction
 ) => {
@@ -22,7 +22,7 @@ const prepareSmsData = (
     });
 };
 
-const prepareCrmData = (
+const prepareMultipleCrmData = (
     appointmens: Appointment[],
     template: TemplateFunction
 ) => {
@@ -37,4 +37,29 @@ const prepareCrmData = (
     });
 };
 
-export { prepareSmsData, prepareCrmData };
+const prepareSingleSmsData = (
+    appointment: Appointment,
+    template: TemplateFunction
+) => {
+    return {
+        recipients: [appointment.customerPhoneNumber],
+        text: template(appointment.appointmentDate, appointment.appointmentId),
+    };
+};
+
+const prepareSingleCrmData = (
+    appointment: Appointment,
+    template: TemplateFunction
+) => {
+    return {
+        customerId: appointment.customerCrmId,
+        text: template(appointment.appointmentDate, appointment.appointmentId),
+    };
+};
+
+export {
+    prepareMultipleSmsData,
+    prepareMultipleCrmData,
+    prepareSingleSmsData,
+    prepareSingleCrmData,
+};

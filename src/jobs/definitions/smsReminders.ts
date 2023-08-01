@@ -7,6 +7,14 @@ const smsDefinitions = (agenda: any) => {
         "send cancelation reminder",
         JobHandlers.cancelationRemainder
     );
+    agenda.define(
+        "send single appointment reminder",
+        JobHandlers.singleAppointmentReminder
+    );
+    agenda.define(
+        "send single cancelation reminder",
+        JobHandlers.singleCancelationReminder
+    );
 };
 
 export default smsDefinitions;

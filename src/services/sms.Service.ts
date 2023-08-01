@@ -49,6 +49,8 @@ const sendSms = async (smsData: SmsData) => {
                 code: response.data.response_code,
             };
         }
+        // Log the successful SMS sending operation
+        logger.info(`SMS sent successfully to ${smsData.recipients}`);
         return response;
     } catch (error: any) {
         if (error.code) {

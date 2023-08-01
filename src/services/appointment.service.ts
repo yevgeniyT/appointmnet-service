@@ -2,9 +2,6 @@
 import AppointmentModel, { IAppointment } from "../models/appointmentModel";
 import { NotFoundError, ConflictError } from "../helpers/apiError";
 
-import { APPOINTMENT_REMINDER } from "../config/smsTemplates";
-import logger from "../utils/logger";
-
 const create = async (appointmentData: IAppointment): Promise<IAppointment> => {
     // 1.Check if appointment already exists
     const existingAppointment = await AppointmentModel.findOne({
@@ -38,14 +35,16 @@ const update = async (
 };
 
 const deleteAppointment = async (
-    appointmetId: string
+    appointmentId: string
 ): Promise<IAppointment> => {
+    console.log(appointmentId);
     const foundAppointment = await AppointmentModel.findOneAndDelete({
-        appointmentId: appointmetId,
+        appointmentId: appointmentId,
     });
+
     if (!foundAppointment) {
         throw new NotFoundError(
-            `An appointment with id - ${appointmetId} does not exists.`
+            `An appointment with id - ${appointmentId} does not exists.`
         );
     }
 
