@@ -73,9 +73,8 @@ const deleteAppointment = async (
     try {
         const appointmentId = req.params.appointmentID;
 
-        await schedule.singleCancelationSchedule(appointmentId.toString());
-
         await appointmentService.deleteAppointment(appointmentId);
+        await schedule.singleCancelationSchedule(appointmentId.toString());
 
         res.status(204).end();
     } catch (error) {

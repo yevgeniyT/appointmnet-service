@@ -34,11 +34,11 @@ const update = async (
     return foundAppointment;
 };
 
+// Not deleting document from DB but change status to "Cancelled". All documents will be deleted at the end of day through agenda jobs
 const deleteAppointment = async (
     appointmentId: string
 ): Promise<IAppointment> => {
-    console.log(appointmentId);
-    const foundAppointment = await AppointmentModel.findOneAndDelete({
+    const foundAppointment = await AppointmentModel.findOne({
         appointmentId: appointmentId,
     });
 
@@ -47,6 +47,9 @@ const deleteAppointment = async (
             `An appointment with id - ${appointmentId} does not exists.`
         );
     }
+
+    foundAppointment.appointmentStatus = "Cancelled";
+    await foundAppointment.save();
 
     return foundAppointment;
 };
