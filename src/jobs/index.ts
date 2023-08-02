@@ -4,7 +4,8 @@ import Agenda from "agenda";
 // Components import
 import { MONGODB_URI } from "../config/secrets";
 import logger from "../utils/logger";
-import smsDefinitions from "./definitions/smsReminders";
+import notificationJobs from "./definitions/notificationJobs";
+import cleanDataBaseJobDefinitions from "./definitions/cleanDataBaseJobs";
 
 // Establish connection to mongoDB
 const agenda = new Agenda({
@@ -21,6 +22,7 @@ agenda.on("error", (error: Error) => {
 });
 
 //define agenda jobs
-smsDefinitions(agenda);
+notificationJobs(agenda);
+cleanDataBaseJobDefinitions(agenda);
 
 export default agenda;

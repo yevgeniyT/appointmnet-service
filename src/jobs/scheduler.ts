@@ -1,47 +1,44 @@
 import logger from "../utils/logger";
 import agenda from "./index";
 
-const schedule = {
-    reminderSchedule: async () => {
-        try {
-            agenda.schedule("in 1 minute", "send appointment reminder", {});
-            logger.info("Multiple appointment reminders scheduled");
-        } catch (error) {
-            logger.error("Failed to schedule multiple appointment reminders", {
-                error,
-            });
+const scheduleJob = async (time: string, jobName: string, data: object) => {
+    try {
+        if (time === "now") {
+            agenda.now(jobName, data);
+        } else if (time.startsWith("every")) {
+            const interval = time.slice(6); // Remove the "every " part of the string
+            agenda.every(interval, jobName, data);
+        } else {
+            agenda.schedule(time, jobName, data);
         }
-    },
-    cancelationSchedule: async () => {
-        try {
-            agenda.schedule("in 3 minute", "send cancelation reminder", {});
-            logger.info("Multiple cancelation reminders scheduled");
-        } catch (error) {
-            logger.error("Failed to schedule multiple cancelation reminders", {
-                error,
-            });
-        }
-    },
-    singleAppointmentSchedule: async (appointmentId: string) => {
-        try {
-            agenda.now("send single appointment reminder", { appointmentId });
-            logger.info("Single appointment reminder scheduled");
-        } catch (error) {
-            logger.error("Failed to schedule single appointment reminder", {
-                error,
-            });
-        }
-    },
-    singleCancelationSchedule: async (appointmentId: string) => {
-        try {
-            agenda.now("send single cancelation reminder", { appointmentId });
-            logger.info("Single cancelation reminder scheduled");
-        } catch (error) {
-            logger.error("Failed to schedule single cancelation reminder", {
-                error,
-            });
-        }
-    },
+        logger.info(`${jobName} scheduled`);
+    } catch (error) {
+        logger.error(`Failed to schedule ${jobName}`, { error });
+    }
 };
 
+const schedule = {
+    multipleAppointmentNotificationSchedule: async () => {
+        scheduleJob("in 1 minute", "send appointment reminder", {});
+    },
+    multipleAppointmentCancelationSchedule: async () => {
+        scheduleJob("in 3 minute", "send cancelation reminder", {});
+    },
+    singleAppointmentNotificationSchedule: async (appointmentId: string) => {
+        scheduleJob("now", "send single appointment reminder", {
+            appointmentId,
+        });
+    },
+    singleAppointmentCancelationSchedule: async (appointmentId: string) => {
+        scheduleJob("now", "send single cancelation reminder", {
+            appointmentId,
+        });
+    },
+    clearExpiredAppointmentsSchedule: async () => {
+        scheduleJob("now", "clean expired appointments", {});
+    },
+    clearCancelledApointmentSchedule: async () => {
+        scheduleJob("now", "clean cancelled appointments", {});
+    },
+};
 export default schedule;

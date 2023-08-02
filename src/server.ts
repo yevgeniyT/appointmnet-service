@@ -21,6 +21,7 @@ connectDB();
 agenda.start().then(() => {
     // schedule.reminderSchedule();
     // schedule.cancelationSchedule();
+    schedule.clearExpiredAppointmentsSchedule();
 });
 
 // Start Express server

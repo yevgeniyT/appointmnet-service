@@ -25,7 +25,7 @@ const addAppointment = async (
 
         // If appointment is created successfuly use agenda jobs to process sending sms and crm notifications
         if (newAppointment) {
-            await schedule.singleAppointmentSchedule(
+            await schedule.singleAppointmentNotificationSchedule(
                 newAppointment.appointmentId.toString()
             );
 
@@ -74,7 +74,9 @@ const deleteAppointment = async (
         const appointmentId = req.params.appointmentID;
 
         await appointmentService.deleteAppointment(appointmentId);
-        await schedule.singleCancelationSchedule(appointmentId.toString());
+        await schedule.singleAppointmentCancelationSchedule(
+            appointmentId.toString()
+        );
 
         res.status(204).end();
     } catch (error) {
