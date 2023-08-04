@@ -26,3 +26,5 @@ notificationJobs(agenda);
 cleanDataBaseJobDefinitions(agenda);
 
 export default agenda;
+
+//TODO  Add single jobs cleanup service. Use mongo feature to set up document lifetime
