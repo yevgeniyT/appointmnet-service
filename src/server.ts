@@ -18,11 +18,7 @@ if (process.env.NODE_ENV === "development") {
 connectDB();
 
 // Start Agenda
-agenda.start().then(() => {
-    // schedule.reminderSchedule();
-    // schedule.cancelationSchedule();
-    schedule.clearExpiredAppointmentsSchedule();
-});
+agenda.start().then(() => {});
 
 // Start Express server
 app.listen(app.get("port"), () => {

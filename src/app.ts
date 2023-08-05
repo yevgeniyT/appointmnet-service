@@ -21,7 +21,7 @@ app.use(morgan("dev"));
 app.set("port", process.env.PORT); //set the value of the 'port' setting to whatever is stored in the environment variable PORT
 app.use(
     cors({
-        origin: "http://localhost:3000",
+        origin: process.env.CORS_ORIGIN,
         credentials: true,
     })
 );
@@ -30,6 +30,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(apiContentType);
+
+// healty check
+app.get("/api/v1/health", (req, res) => {
+    res.status(200).send({ status: "ok" });
+});
 
 // Set up routers
 app.use("/api/v1/appointments", appointmentRouter);

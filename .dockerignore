@@ -1,0 +1,17 @@
+# Ignore the node_modules directory
+node_modules
+
+# Ignore the npm debug log file
+npm-debug.log*
+
+# Ignore .env file as it may contain sensitive data
+.env
+
+# Ignore any dist directory
+dist
+
+# Ignore any .git directory
+.git
+
+# Ignore any .cache directory
+.cache
