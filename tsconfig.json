@@ -8,8 +8,8 @@
         "noImplicitAny": true,
         "moduleResolution": "node",
         "sourceMap": true,
-        "outDir": "dist"
-        // "skipLibCheck": true // to ignore error while building Docker container error TS2344: Type 'T' does not satisfy the constraint 'JobAttributesData'.
+        "outDir": "dist",
+        "skipLibCheck": true // to ignore error while building Docker container error TS2344: Type 'T' does not satisfy the constraint 'JobAttributesData'.
         // "baseUrl": ".",
         // "paths": {
         //     "*": ["node_modules/*"]

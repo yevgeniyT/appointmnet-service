@@ -9,7 +9,7 @@ import morgan from "morgan";
 //Components import
 import apiContentType from "./middleware/apiContentType";
 import apiErrorHandler from "./middleware/apiErrorHandler";
-import appointmentRouter from "../src/routes/appointment.router";
+import appointmentRouter from "./routes/appointment.router";
 
 dotenv.config({ path: ".env" }); //reads the .env file in the root of the project, parses it, and populates the process.env object with the values.
 
