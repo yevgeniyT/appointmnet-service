@@ -31,13 +31,8 @@ app.use(cookieParser());
 
 app.use(apiContentType);
 
-//Welcome message
-app.get("/", (req, res) => {
-    res.status(200).send("Welcome to my app!");
-});
-
 // healty check
-app.get("/api/v1/health", (req, res) => {
+app.get("/", (req, res) => {
     res.status(200).send({ status: "ok" });
 });
 
