@@ -1,7 +1,7 @@
 // Components import
 import { InternalServerError } from "../../helpers/apiError";
 import AppointmentModel from "../../models/appointmentModel";
-import logger from "../../utils/logger";
+import { logger } from "../../utils/logger";
 
 // Get today's and tomorrow's dates
 const startOfToday = new Date();

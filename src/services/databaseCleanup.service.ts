@@ -1,7 +1,7 @@
 //Components import
 import { InternalServerError } from "../helpers/apiError";
 import AppointmentModel from "../models/appointmentModel";
-import logger from "../utils/logger";
+import { logger } from "../utils/logger";
 
 // Reusable function to get the start of a given day
 const getStartOfDay = (daysFromNow = 0) => {

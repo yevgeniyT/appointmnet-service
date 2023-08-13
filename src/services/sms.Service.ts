@@ -15,7 +15,7 @@ import {
     RequiredContentError,
     RequiredTokenError,
 } from "../helpers/smsError";
-import logger from "../utils/logger";
+import { logger } from "../utils/logger";
 
 //Types
 interface SmsData {
@@ -42,12 +42,13 @@ const sendSms = async (smsData: SmsData) => {
                 },
             }
         );
+
         // As api does not throw error but only return response with status we throw error in all cases when response status code is not equal to 801 which is sucess code.
         if (response.data.response_code !== 801) {
             throw {
-                message: "SMS API responded with an error",
-                code: response.data.response_code,
+                message: `SMS API responded with an error code:${response.data.response_code}`,
             };
+            console.log(response.data.response_code);
         }
         // Log the successful SMS sending operation
         logger.info(`SMS sent successfully to ${smsData.recipients}`);

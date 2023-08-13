@@ -1,4 +1,4 @@
-import logger from "../utils/logger";
+import { logger } from "../utils/logger";
 import agenda from "./index";
 
 const scheduleJob = async (time: string, jobName: string, data: object) => {

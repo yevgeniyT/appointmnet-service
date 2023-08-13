@@ -1,23 +1,47 @@
+// Dependencies import
 import winston from "winston";
+import WinstonCloudwatch from "winston-cloudwatch";
+
+const isProduction = process.env.NODE_ENV === "production";
+console.log(isProduction);
+console.log(process.env.NODE_ENV);
+
+//Define configuration for AWS logs upload
+const LogsCloudWatchConfig = {
+    level: process.env.NODE_ENV === "production" ? "error" : "debug",
+    logGroupName: "appointment-app/application-logs",
+    logStreamName: "App-logs",
+    awsRegion: "eu-central-1",
+};
+// Define configuration for AWS HTTP/morgan logs upload
+// const morganCloudWatchConfig = {
+//     ...LogsCloudWatchConfig,
+//     logStreamName: "HTTP-logs",
+// };
 
 const options: winston.LoggerOptions = {
     format: winston.format.combine(
+        // winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
         winston.format.colorize(), // Add color to logs
         winston.format.printf(({ level, message }) => {
             return `[${level}]: ${message}`;
         })
     ),
-    transports: [
-        new winston.transports.Console({
-            level: process.env.NODE_ENV === "production" ? "error" : "debug",
-        }),
-    ],
+    transports: isProduction
+        ? [new WinstonCloudwatch(LogsCloudWatchConfig)]
+        : [new winston.transports.Console({ level: "debug" })],
 };
 
-const logger = winston.createLogger(options);
+// const morganLoggerOptions: winston.LoggerOptions = {
+//     ...options,
+//     transports: [new WinstonCloudwatch(morganCloudWatchConfig)],
+// };
 
-if (process.env.NODE_ENV !== "production") {
+const logger = winston.createLogger(options);
+// const morganLogger = winston.createLogger(morganLoggerOptions);
+
+if (!isProduction) {
     logger.debug("Logging initialized at debug level");
 }
 
-export default logger;
+export { logger };

@@ -2,7 +2,7 @@
 import { InternalServerError } from "../../helpers/apiError";
 import sendCrmNotification from "../../services/bitrix24.service";
 import sendSms from "../../services/sms.Service";
-import logger from "../../utils/logger";
+import { logger } from "../../utils/logger";
 import {
     prepareMultipleCrmData,
     prepareMultipleSmsData,

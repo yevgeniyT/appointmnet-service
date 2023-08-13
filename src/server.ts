@@ -3,9 +3,9 @@ import errorHandler from "errorhandler";
 
 import app from "./app";
 import { connectDB } from "./config/db";
-import logger from "./utils/logger";
 import agenda from "./jobs";
 import schedule from "./jobs/scheduler";
+import { logger } from "./utils/logger";
 
 // Start logging
 logger.info("Server is starting...");

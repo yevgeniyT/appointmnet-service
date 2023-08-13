@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 import ApiError from "../helpers/apiError";
-import logger from "../utils/logger";
+import { logger } from "../utils/logger";
 
 export default function (
     error: ApiError | Error,

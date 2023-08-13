@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import fs from "fs";
 
 // Components import
-import logger from "../utils/logger";
+import { logger } from "../utils/logger";
 
 //Check if the .env file exists. If it does, it loads this file and sets up the environment variables from it. If it doesn't exist, it tries to load the .env.example file instead.
 if (fs.existsSync(".env")) {

@@ -2,7 +2,7 @@
 import mongoose from "mongoose";
 
 import { MONGODB_URI } from "./secrets";
-import logger from "../utils/logger";
+import { logger } from "../utils/logger";
 
 export const connectDB = async () => {
     try {
