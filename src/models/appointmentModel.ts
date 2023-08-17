@@ -42,6 +42,7 @@ const appointmentSchema = new mongoose.Schema({
             "Cancelled",
         ],
         default: "Not Confirmed",
+        required: true,
     },
     customerCrmId: {
         type: String,

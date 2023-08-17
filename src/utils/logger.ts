@@ -8,7 +8,7 @@ console.log(process.env.NODE_ENV);
 
 //Define configuration for AWS logs upload
 const LogsCloudWatchConfig = {
-    level: process.env.NODE_ENV === "production" ? "error" : "debug",
+    level: "error",
     logGroupName: "appointment-app/application-logs",
     logStreamName: "App-logs",
     awsRegion: "eu-central-1",
@@ -45,3 +45,5 @@ if (!isProduction) {
 }
 
 export { logger };
+
+//TODO Add morgan looger to AWS
