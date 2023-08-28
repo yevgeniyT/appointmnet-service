@@ -68,3 +68,13 @@ export class ConflictError extends ApiError {
         super(statusCode, message, source);
     }
 }
+
+export class InvalidInputError extends ApiError {
+    constructor(
+        readonly message: string = "Invalid Input",
+        readonly statusCode: number = 422,
+        source?: Error | any
+    ) {
+        super(statusCode, message, source);
+    }
+}
