@@ -10,6 +10,7 @@ const runValidation = async (
 ) => {
     try {
         const errors = validationResult(req);
+        //isEmpty() method of express validation to quicly understand if there any validation errors
         if (!errors.isEmpty()) {
             {
                 const errorMessage = errors.array()[0].msg;
