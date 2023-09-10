@@ -86,7 +86,10 @@ const sendSms = async (smsData: SmsData) => {
                     );
             }
         } else {
-            logger.error(`Failed to send SMS: ${error.message}`, { error });
+            logger.error(
+                `Failed to send SMS in sms.Service component: ${error.message}`,
+                { error }
+            );
             throw new InternalServerError("Failed to send SMS", 500, error);
         }
     }
