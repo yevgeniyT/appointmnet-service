@@ -1,11 +1,14 @@
+import { createAppointmentToken } from "../../services/appointmentVarification.service";
+
 interface Appointment {
+    _id: string;
     customerPhoneNumber: string;
     customerCrmId: string;
     appointmentDate: Date;
     appointmentId: string;
 }
 
-type TemplateFunction = (date: Date, id: string) => string;
+type TemplateFunction = (date: Date, id: string, token?: string) => string;
 
 const prepareMultipleSmsData = (
     appointmens: Appointment[],
@@ -41,9 +44,17 @@ const prepareSingleSmsData = (
     appointment: Appointment,
     template: TemplateFunction
 ) => {
+    const token = createAppointmentToken(
+        appointment._id.toString(),
+        new Date(appointment.appointmentDate)
+    );
     return {
         recipients: [appointment.customerPhoneNumber],
-        text: template(appointment.appointmentDate, appointment.appointmentId),
+        text: template(
+            appointment.appointmentDate,
+            appointment.appointmentId,
+            token
+        ),
     };
 };
 

@@ -26,6 +26,16 @@ if (!MONGODB_URI) {
     process.exit(1); //Node.js command that terminates the current process.
 }
 
+// JWT
+export const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
+
+if (!JWT_SECRET_KEY) {
+    logger.error(
+        "No JWT secret key found. Set JWT_SECRET_KEY environment variable."
+    );
+    process.exit(1); //Node.js command that terminates the current process.
+}
+
 // TurboSms Services
 export const SMS_AUTH_TOKEN = process.env.SMS_AUTH_TOKEN as string;
 export const SMS_BASE_URL = process.env.SMS_BASE_URL as string;

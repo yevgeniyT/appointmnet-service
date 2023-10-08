@@ -87,7 +87,7 @@ const processSingleReminder = async (
     appointmentId: string
 ) => {
     try {
-        logger.info(`Start processing single ${type}  reminder`);
+        logger.info(`Start processing single ${type} reminder`);
         // 1. Get appontmnet
         const appointment = await getSingleAppointment(appointmentId);
 

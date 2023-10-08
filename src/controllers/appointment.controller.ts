@@ -27,7 +27,7 @@ const addAppointment = async (
         if (newAppointment) {
             await schedule.singleAppointmentNotificationSchedule(
                 newAppointment.appointmentId.toString()
-            );
+            ); // pass id to find appointnt in DB later in agenda jobs to send sms anr crm reminder
 
             return res.json(newAppointment);
         }
