@@ -36,6 +36,14 @@ if (!JWT_SECRET_KEY) {
     process.exit(1); //Node.js command that terminates the current process.
 }
 
+// Client URL
+export const CLIENT_URL = process.env.CLIENT_URL as string;
+
+if (!CLIENT_URL) {
+    logger.error("No Client URL found. Set CLIENT_URL environment variable.");
+    process.exit(1); //Node.js command that terminates the current process.
+}
+
 // TurboSms Services
 export const SMS_AUTH_TOKEN = process.env.SMS_AUTH_TOKEN as string;
 export const SMS_BASE_URL = process.env.SMS_BASE_URL as string;

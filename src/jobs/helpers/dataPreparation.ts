@@ -1,4 +1,7 @@
 import { createAppointmentToken } from "../../services/appointmentVarification.service";
+import { CLIENT_URL } from "../../config/secrets";
+import generateShortCode from "../../helpers/shortCode";
+import shortenUrl from "../../services/urlShorten.service";
 
 interface Appointment {
     _id: string;
@@ -40,7 +43,7 @@ const prepareMultipleCrmData = (
     });
 };
 
-const prepareSingleSmsData = (
+const prepareSingleSmsData = async (
     appointment: Appointment,
     template: TemplateFunction
 ) => {
@@ -48,12 +51,14 @@ const prepareSingleSmsData = (
         appointment._id.toString(),
         new Date(appointment.appointmentDate)
     );
+    const longUrl = `${CLIENT_URL}/api/v1/appointments/appointment-data/${token}`;
+    const shortUrl = await shortenUrl(longUrl);
     return {
         recipients: [appointment.customerPhoneNumber],
         text: template(
             appointment.appointmentDate,
             appointment.appointmentId,
-            token
+            shortUrl
         ),
     };
 };

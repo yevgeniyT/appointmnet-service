@@ -14,7 +14,11 @@ import {
     getSingleAppointment,
 } from "./getAppointments";
 
-type TemplateFunction = (time: Date, appointmentId: string) => string;
+type TemplateFunction = (
+    time: Date,
+    appointmentId: string,
+    shortenUrl?: string
+) => string;
 
 const processMultipleReminders = async (
     type: string,
@@ -96,7 +100,7 @@ const processSingleReminder = async (
         const crmData = prepareSingleCrmData(appointment, template);
 
         // 3. Send data to services
-        await sendSms(smsData);
+        await sendSms(await smsData);
         await sendCrmNotification(crmData);
 
         logger.info(`Finish processing ${type} single reminder`);
