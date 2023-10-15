@@ -1,6 +1,5 @@
 import { createAppointmentToken } from "../../services/appointmentVarification.service";
 import { CLIENT_URL } from "../../config/secrets";
-import generateShortCode from "../../helpers/shortCode";
 import shortenUrl from "../../services/urlShorten.service";
 
 interface Appointment {

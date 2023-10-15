@@ -16,7 +16,7 @@ export const APPOINTMENT_REMINDER = (
     const minutes = padNumber(time.getMinutes());
 
     // Use template literals to construct the string
-    return `Вітаємо! Ви успішно записались на прийом до медичного центру TilkiDity: ${day}-${month}-${year} о ${hours}:${minutes}. Деталі запису за посиланням: ${shortUrl}. Чекаємо на Вас та вашу посмішку!`;
+    return `Вітаємо! Ви успішно записались на прийом до медичного центру TilkiDity: ${day}-${month}-${year} о ${hours}:${minutes}. Деталі запису за посиланням: ${shortUrl} Чекаємо на Вас та вашу посмішку!`;
 };
 
 export const APPOINTMENT_CONFIRMATION = (time: Date, appointmentId: string) =>

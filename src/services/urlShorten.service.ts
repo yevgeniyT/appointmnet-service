@@ -8,6 +8,7 @@ import { CLIENT_URL } from "../config/secrets";
 const shortenUrl = async (originalUrl: string): Promise<string> => {
     const shortCode = generateShortCode();
     const shortUrl = `${CLIENT_URL}/${shortCode}`;
+    console.log(CLIENT_URL);
 
     const urlData = new UrlModel({
         originalUrl,
